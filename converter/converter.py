@@ -6,12 +6,6 @@ def file_to_nparr(filename):
     return np.array(list(content))
 
 
-# def file_to_bytes(filename):
-#     with open(filename, 'rb') as f:
-#         content = f.read()
-#     return content
-
-
 def nparr_to_file(ints, filename):
     ints = ints.tolist()
     with open(filename, 'wb+') as f:
@@ -28,3 +22,9 @@ def nparr_to_str(ints, n_chr):
     strs = [hex(x)[2:].zfill(n_chr) for x in ints]
     return ''.join(strs)
 
+
+def int_to_bytes(x: int) -> bytes:
+    return x.to_bytes((x.bit_length() + 7) // 8, 'big')
+    
+def int_from_bytes(xbytes: bytes) -> int:
+    return int.from_bytes(xbytes, 'big')

@@ -3,7 +3,7 @@ from random import getrandbits
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 import unittest
-from aes.converter import file_to_nparr, str_to_nparr, nparr_to_str
+from converter.converter import file_to_nparr, str_to_nparr, nparr_to_str
 from aes.key_expansion import key_expansion
 from aes.cipher import cipher, sub_bytes, mix_columns, shift_rows
 from aes.helper import get_round_key, add_round_key, to_matrix, flatten
@@ -142,14 +142,14 @@ class TestAES(unittest.TestCase):
 
     def test_file_read_write(self):
         # encrypt the file
-        in_path = os.path.join(THIS_DIR, 'in.txt')
+        in_path = os.path.join(THIS_DIR, 'test.png')
         key = bytes('2b7e151628aed2a6abf7158809cf4f3c', 'utf-8')
         iv = str_to_nparr('000102030405060708090a0b0c0d0e0f')
         aes = AES()
         out = aes.cbc_encrypt_file(in_path, key, iv)
         
         # decrypt the file
-        out_path = os.path.join(THIS_DIR, 'out.txt')
+        out_path = os.path.join(THIS_DIR, 'out.png')
         aes.cbc_decrypt_file(out, out_path, key, iv)
         self.assertTrue(filecmp.cmp(in_path, out_path))
 

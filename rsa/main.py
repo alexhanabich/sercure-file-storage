@@ -27,13 +27,9 @@ class RSA():
         return n, d, self.e
 
 
-    def encrypt(self, msg:bytes, e:int, n:int)->bytes:
-        msg = int.from_bytes(msg, "big")
-        cipher = mod_exp(msg, e, n)
-        return cipher.to_bytes((cipher.bit_length()+7)//8, 'big')
+    def encrypt(self, msg:int, e:int, n:int) -> int:
+        return mod_exp(msg, e, n)
 
 
-    def decrypt(self, msg:bytes, d:int, n:int)->bytes:
-        msg = int.from_bytes(msg, "big")
-        plain = mod_exp(msg, d, n)
-        return plain.to_bytes((plain.bit_length()+7)//8, 'big')
+    def decrypt(self, msg:int, d:int, n:int) -> int:
+        return mod_exp(msg, d, n)

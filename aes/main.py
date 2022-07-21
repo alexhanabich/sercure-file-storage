@@ -2,11 +2,9 @@ import numpy as np
 from aes.key_expansion import key_expansion
 from aes.cipher import cipher
 from aes.inv_cipher import inv_cipher
-from aes.converter import file_to_nparr, nparr_to_file, str_to_nparr
-from aes.helper import hex_print, split_arr
+from converter.converter import file_to_nparr, nparr_to_file
+from aes.helper import hex_print, split_arr, int_to_bytes
 import random
-
-from helper import int_from_bytes
 
 
 BLOCK_SIZE = 16
@@ -36,7 +34,7 @@ class AES:
 
 
     def generate_iv(self):
-        return random.getrandbits(16)
+        return np.array(list(int_to_bytes(random.getrandbits(128))))
 
 
     def encrypt(self, input: np.ndarray, key: np.ndarray) -> np.ndarray:
