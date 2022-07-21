@@ -1,5 +1,5 @@
 import numpy as np
-from helper import get_sbox, rcon
+from aes.helper import get_sbox, rcon
 
 # substitue bytes using sbox
 def sub_word(word: bytes) -> bytes:
@@ -19,6 +19,7 @@ def rot_word(word: bytes) -> bytes:
 
 
 def key_expansion(key: np.ndarray) -> np.ndarray:
+    assert(type(key) == np.ndarray)
     nb = 4
     nk = key.size // 4
     nr = nk + 6

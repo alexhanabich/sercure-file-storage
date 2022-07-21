@@ -1,4 +1,4 @@
-from helper import mod_exp, generate_prime, mult_inv, gcd
+from rsa.helper import mod_exp, generate_prime, mult_inv, gcd
 
 class RSA():
     def __init__(self, key_bit=None):
@@ -37,12 +37,3 @@ class RSA():
         msg = int.from_bytes(msg, "big")
         plain = mod_exp(msg, d, n)
         return plain.to_bytes((plain.bit_length()+7)//8, 'big')
-
-
-msg = b'helloworld'
-rsa = RSA()
-n, d, e = rsa.generate_keys()
-cipher = rsa.encrypt(msg, e, n)
-print(cipher)
-plain = rsa.decrypt(cipher, d, n)
-print(plain)

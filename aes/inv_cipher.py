@@ -1,5 +1,5 @@
 import numpy as np
-from helper import get_inv_sbox, ff_mult, to_matrix, get_round_key, add_round_key, flatten
+from aes.helper import get_inv_sbox, ff_mult, to_matrix, get_round_key, add_round_key, flatten
 
 # substitute bytes with inv_sbox
 def inv_sub_bytes(state: np.ndarray) -> None:
