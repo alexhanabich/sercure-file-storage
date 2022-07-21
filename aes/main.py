@@ -4,7 +4,7 @@ from cipher import cipher
 from inv_cipher import inv_cipher
 from converter import file_to_ints, ints_to_file, str_to_ints
 from helper import hex_print, split_arr
-import typing
+import random
 
 
 BLOCK_SIZE = 16
@@ -27,6 +27,14 @@ class AES:
                 pad_len += 1
                 break
         return np.resize(input, input.size-pad_len)
+
+
+    def generate_key(n):
+        return random.getrandbits(n)
+
+
+    def generate_iv():
+        return random.getrandbits(16)
 
 
     def encrypt(self, input: np.ndarray, key: np.ndarray) -> np.ndarray:
@@ -97,66 +105,33 @@ class AES:
         return self.__unpad(plain)
 
 
-    # in_file: str out_file: str, key: str, -> file
-    def ecb_encrypt_file(self, in_file: str, out_file: str, key: str) -> typing.IO:
+    def ecb_encrypt_file(self, in_file: str, key: bytes) -> bytes:
         ints = file_to_ints(in_file)
-        key = str_to_ints(key)
+        key = np.array(list(key))
         aes = AES()
         ciphertext = aes.ecb_encrypt(ints, key)
-        ints_to_file(ciphertext, out_file)
+        return bytes(ciphertext.tolist())
 
 
-    def ecb_decrypt_file(self, in_file: str, out_file: str, key: str) -> typing.IO:
-        ints = file_to_ints(in_file)
-        key = str_to_ints(key)
+    def ecb_decrypt_file(self, input: bytes, out_file: str, key: bytes) -> None:
+        ints = np.array(list(input))
+        key = np.array(list(key))
         aes = AES()
         plaintext = aes.ecb_decrypt(ints, key)
         ints_to_file(plaintext, out_file)
 
 
-    def ecb_encrypt_text(self, txt: str, key: str) -> str:
-        ints = str_to_ints(txt)
-        key = str_to_ints(key)
-        aes = AES()
-        return aes.ecb_encrypt(ints, key)
-
-
-    def ecb_decrypt_text(self, txt: str, key: str) -> str:
-        ints = file_to_ints(txt)
-        key = str_to_ints(key)
-        aes = AES()
-        return aes.ecb_decrypt(ints, key)
-
-
-    def cbc_encrypt_file(self, in_file: str, out_file: str, key: str , iv: bytes) -> typing.IO:
+    def cbc_encrypt_file(self, in_file: str, key: bytes , iv: bytes) -> bytes:
         ints = file_to_ints(in_file)
-        out_file = out_file
-        key = str_to_ints(key)
+        key = np.array(list(key))
         aes = AES()
         ciphertext = aes.cbc_encrypt(ints, key, iv)
-        ints_to_file(ciphertext, out_file)
+        return bytes(ciphertext.tolist())
 
 
-    def cbc_decrypt_file(self, in_file: str, out_file: str, key: str, iv: bytes) -> typing.IO:
-        ints = file_to_ints(in_file)
-        out_file = out_file
-        key = str_to_ints(key)
+    def cbc_decrypt_file(self, input: bytes, out_file: str, key: bytes, iv: bytes) -> None:
+        ints = np.array(list(input))
+        key = np.array(list(key))
         aes = AES()
-        ciphertext = aes.cbc_decrypt(ints, key, iv)
-        ints_to_file(ciphertext, out_file)
-
-
-    def cbc_encrypt_text(self, txt: str, key: str) -> str:
-        ints = str_to_ints(txt)
-        key = str_to_ints(key)
-        aes = AES()
-        iv = bytearray(16)
-        return aes.cbc_encrypt(ints, key, iv)
-
-
-    def cbc_decrypt_text(self, txt: str, key: str) -> str:
-        ints = file_to_ints(txt)
-        key = str_to_ints(key)
-        aes = AES()
-        iv = bytearray(16)
-        return aes.cbc_decrypt(ints, key, iv)
+        plaintext = aes.cbc_decrypt(ints, key, iv)
+        ints_to_file(plaintext, out_file)
